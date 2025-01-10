@@ -12,10 +12,8 @@ import {
 } from "../Redux/reducer/cartReducer";
 import { CartItem as cartItem } from "../Types/types";
 import axios from "axios";
-import { RootState, server } from "../Redux/store";
 
 const Cart = () => {
-  const {user} = useSelector((state:RootState)=>state.userReducer);
   const {
     cartItems: cartItem,
     subTotal: subTotal,

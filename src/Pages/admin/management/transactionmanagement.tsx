@@ -15,7 +15,7 @@ const TransactionManagement = () => {
 
   const params = useParams();
   const navigate = useNavigate();
-  const { isLoading, currentData , data, isError } = useOrderDetailsQuery(params.id!);
+  const { isLoading , data, isError } = useOrderDetailsQuery(params.id!);
 
   const defaultOBJ = {
     shippingInfo: {

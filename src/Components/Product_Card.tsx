@@ -9,7 +9,6 @@ type Product_Card_Props = {
     stock: number;
     handler:(cartItem: CartItem) => string | undefined;
 }
-const server = "fdjfklsffk";
 const Product_Card = ({productId,photo,name,price,stock,handler}:Product_Card_Props) => {
   return (
     <div className="product_card">
