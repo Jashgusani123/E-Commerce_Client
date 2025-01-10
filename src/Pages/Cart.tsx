@@ -16,7 +16,7 @@ import axios from "axios";
 const Cart = () => {
   const {
     cartItems: cartItem,
-    subtotal: subTotal,
+    subTotal: subTotal,
     tax,
     total,
     discount,
