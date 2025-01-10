@@ -1,0 +1,7 @@
+.not-Found{
+    height: 80vh;
+  @include flex(column);
+  >svg{
+    font-size: 4rem;
+  }
+}
