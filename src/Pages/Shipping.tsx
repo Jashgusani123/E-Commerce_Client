@@ -20,9 +20,8 @@ const Shipping = () => {
     country: "",
     pinCode: 0,
   });
-
   const navigate = useNavigate();
-
+  
   const submitHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -34,7 +33,6 @@ const Shipping = () => {
           amount: total,
         }
       );
-      
 
       navigate("/pay", {
         state: data.data?.clientSecret,

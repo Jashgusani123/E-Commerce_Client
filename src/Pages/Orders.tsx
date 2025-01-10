@@ -15,7 +15,6 @@ type DataType = {
   quantity: number;
   discount: number;
   status: ReactElement;
-  action: ReactElement;
 };
 
 const columns: Column<DataType>[] = [
@@ -39,10 +38,6 @@ const columns: Column<DataType>[] = [
     Header: "Status",
     accessor: "status",
   },
-  {
-    Header: "Action",
-    accessor: "action",
-  },
 ];
 
 const Orders = () => {
@@ -54,38 +49,36 @@ const Orders = () => {
 
   const [Rows, setrows] = useState<DataType[]>([]);
 
-  
   if (isError) {
     const err = error as customError;
     toast.error(err.data.message);
   }
-  
+
   useEffect(() => {
     if (data) {
       setrows(
         data?.Orders.map((i) => ({
-            _id: i._id,
-            amount: i.totalAmount,
-            quantity: i.orderItems.length,
-            discount: i.discount,
-            status:(
-                <span
+          _id: i._id,
+          amount: i.totalAmount,
+          quantity: i.orderItems.length,
+          discount: i.discount,
+          status: (
+            <span
               className={
                 i.status === "Processing"
-                  ? "red": i.status === "Shipped"
+                  ? "red"
+                  : i.status === "Shipped"
                   ? "green"
                   : "purple"
               }
             >
               {i.status}
             </span>
-            ) ,
-            action:  <Link to={`/admin/transaction/${i._id}`}>Manage</Link>,
+          ),
         }))
       );
     }
   }, [data]);
-
 
   const Table = TableHOC<DataType>(
     columns,
@@ -97,7 +90,7 @@ const Orders = () => {
   return (
     <div className="container">
       <h1>My Orders</h1>
-      <main>{isLoading?<Skeleton count={21}/>:Table}</main>
+      <main>{isLoading ? <Skeleton count={21} /> : Table}</main>
     </div>
   );
 };

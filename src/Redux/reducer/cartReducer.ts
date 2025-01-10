@@ -10,6 +10,7 @@ const initialState: CartReducerInitialState = {
   shippingCharges: 0,
   discount: 0,
   total: 0,
+  couponCode:"",
   shippingInfo: {
     address: "",
     city: "",
@@ -18,7 +19,10 @@ const initialState: CartReducerInitialState = {
     pinCode: 0,
   },
 };
-
+type couponType ={
+  discount:number,
+  couponCode:string
+}
 export const cartReducer = createSlice({
   name: "cartReducer",
   initialState,
@@ -55,13 +59,14 @@ export const cartReducer = createSlice({
       state.total =
         state.subTotal + state.tax + state.shippingCharges - state.discount;
     },
-    applyDiscount : (state , action:PayloadAction<number>)=>{
-      state.discount = action.payload ;
+    applyDiscount : (state , action:PayloadAction<couponType>)=>{
+      state.discount = action.payload.discount ;
+      state.couponCode= action.payload.couponCode
     },
     saveShippingInfo :(state , action:PayloadAction<ShippingInfo> )=>{
       state.shippingInfo = action.payload
     },
-    resetCart:()=> initialState,
+    resetCart:()=> initialState
   },
 });
 

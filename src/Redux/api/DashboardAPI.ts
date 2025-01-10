@@ -20,7 +20,7 @@ export const DashboardAPI = createApi({
     }),
     line:builder.query<LineRespones, string>({
         query:((id)=>`line?id=${id}`)
-    }),
+    })
 })
 });
 

@@ -1,11 +1,15 @@
 import { FormEvent, useEffect, useState } from "react";
 import AdminSidebar from "../../../Components/admin/AdminSidebar";
+import axios from "axios";
+import { RootState, server } from "../../../Redux/store";
+import { useSelector } from "react-redux";
 
 const allLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 const allNumbers = "1234567890";
 const allSymbols = "!@#$%^&*()_+";
 
 const Coupon = () => {
+  const { user } = useSelector((state: RootState) => state.userReducer);
   const [size, setSize] = useState<number>(8);
   const [prefix, setPrefix] = useState<string>("");
   const [includeNumbers, setIncludeNumbers] = useState<boolean>(false);
@@ -20,7 +24,7 @@ const Coupon = () => {
     setIsCopied(true);
   };
 
-  const submitHandler = (e: FormEvent<HTMLFormElement>) => {
+  const submitHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!includeNumbers && !includeCharacters && !includeSymbols)
@@ -41,7 +45,16 @@ const Coupon = () => {
 
     setCoupon(result);
   };
-
+  useEffect(() => {
+    if (coupon) {
+       axios
+        .post(`${server}/api/v1/payment/coupon/new?id=${user?._id!}`, {
+          code: coupon,
+          amount: prefix,
+        })
+    }
+  }, [coupon]);
+  
   useEffect(() => {
     setIsCopied(false);
   }, [coupon]);

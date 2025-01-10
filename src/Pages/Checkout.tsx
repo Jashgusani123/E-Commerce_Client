@@ -5,13 +5,14 @@ import {
   useStripe,
 } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
+import axios from "axios";
 import { FormEvent, useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { useNewOrderMutation } from "../Redux/api/OrderAPI";
 import { resetCart } from "../Redux/reducer/cartReducer";
-import { RootState } from "../Redux/store";
+import { RootState, server } from "../Redux/store";
 import { NewOrderRequest } from "../Types/api";
 import { responesToast } from "../Utils/Feature";
 
@@ -34,11 +35,15 @@ const CheckOutForm = () => {
     tax,
     cartItems,
     total,
+    couponCode
   } = useSelector(
     (state:RootState) => state.cartReducer
   );
   const [isProcessing, setisProcessing] = useState<boolean>(false);
   const [newOrder] = useNewOrderMutation()
+  const deleteCoupon = (code:string)=>{
+     axios.delete(`${server}/api/v1/payment/coupon/${code}?id=${user?._id!}`)
+  }
   const submitHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!stripe || !elements) return;
@@ -66,6 +71,7 @@ const CheckOutForm = () => {
     }
     if (paymentIntent.status === "succeeded") {
       const res = await newOrder(order)
+      deleteCoupon(couponCode)
         dispatch(resetCart());
         responesToast(res , navigate , "/orders")
     }

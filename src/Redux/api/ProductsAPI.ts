@@ -82,7 +82,7 @@ export const ProductAPI = createApi({
         method: "DELETE",
       }),
       invalidatesTags: ["Product"],
-    }),
+    })
   }),
 });
 

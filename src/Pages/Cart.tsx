@@ -12,8 +12,10 @@ import {
 } from "../Redux/reducer/cartReducer";
 import { CartItem as cartItem } from "../Types/types";
 import axios from "axios";
+import { RootState, server } from "../Redux/store";
 
 const Cart = () => {
+  const {user} = useSelector((state:RootState)=>state.userReducer);
   const {
     cartItems: cartItem,
     subTotal: subTotal,
@@ -28,6 +30,8 @@ const Cart = () => {
   const [isValidCouponCode, setIsValidCouponCode] = useState<boolean>(false);
   const dispatch = useDispatch();
 
+ 
+
   useEffect(() => {
     const { token, cancel } = axios.CancelToken.source();
     const id = setTimeout(() => {
@@ -39,12 +43,12 @@ const Cart = () => {
           { cancelToken: token }
         )
         .then((res) => {
-          dispatch(applyDiscount(res.data.discount));
+          dispatch(applyDiscount({discount:res.data.discount,couponCode:couponCode}));
           setIsValidCouponCode(true);
           dispatch(calculatePrice());
         })
         .catch(() => {
-          dispatch(applyDiscount(0));
+          dispatch(applyDiscount({discount:0,couponCode:""}));
           setIsValidCouponCode(false);
           dispatch(calculatePrice());
         });
@@ -55,6 +59,8 @@ const Cart = () => {
       setIsValidCouponCode(false);
     };
   }, [couponCode]);
+
+
   const incrementHandler = (cartItem: cartItem) => {
     if (cartItem.quantity >= cartItem.stock) return;
     dispatch(addToCart({ ...cartItem, quantity: cartItem.quantity + 1 }));
